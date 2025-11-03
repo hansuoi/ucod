@@ -1,0 +1,12 @@
+@startmindmap TestViewPoint
+
+* Test Object
+** UI
+*** Button
+*** Text Box
+** Environment
+*** Browser
+*** Device
+** Error
+
+@endmindmap
