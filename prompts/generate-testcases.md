@@ -4,6 +4,7 @@
     - Test Viewpoint Mindmap in PlantUML
 - Read them both and generate comprehensive, deduplicated, and maintainable test cases.
 - Design test cases by appropriately combining UCOD content and test viewpoints. Multiple test viewpoints may be included in a single test case.
+    - UCOD: https://github.com/hansuoi/ucod/blob/main/docs/ucod-design-guide-en.md
 
 
 # Inputs
