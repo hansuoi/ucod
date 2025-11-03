@@ -25,13 +25,13 @@
 ## Directory Structure
 ```
 .
-├─ README.md                       # this file
+├─ README.md                 # this file
 ├─ docs/
 │  ├─ ucod-design-guide-en.md
 │  └─ ucod-design-guide-ja.md
 ├─ prompts/
-│  ├─ generate-pom.md              # Example prompt for generating automated tests
-│  └─ generate-testcases.md        # Example prompt for generating test cases
+│  ├─ generate-pom.md        # Example prompt for generating automated tests
+│  └─ generate-testcases.md  # Example prompt for generating test cases
 └─ samples/
    ├─ ucod-sample.puml
    └─ test-viewpoint-sample.puml
