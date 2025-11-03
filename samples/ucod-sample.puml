@@ -1,0 +1,74 @@
+@startuml UCOD Sample
+
+skinparam class {
+  BackgroundColor<<Page>> #E8F2FF
+  BackgroundColor<<Modal>> #CCCCCC
+  BackgroundColor<<Component>> #FFD6A5
+  BackgroundColor<<Overlay>> #FFECB3
+  BorderColor Black
+}
+
+
+class "Login Page" <<Page>> {
+  (TextBox) Email Address
+  (TextBox) Password
+  (Button) Log In
+  ---
+  Perform login
+}
+
+class "Home Page" <<Page>> {
+  <<Component>> Header
+  ---
+}
+
+class "Settings Page" <<Page>> {
+  <<Component>> Header
+    \t+ (Text) Percentage of configured items
+  (Button) Change Password
+  (PullDown) Theme Color
+  ---
+  Change the theme color
+}
+
+class "Change Password Modal" <<Modal>> {
+  (TextBox) Current Password
+  (TextBox) New Password
+  (TextBox) Confirm New Password
+  (Button) Save Changes
+  ---
+  Update user password
+}
+
+
+package "Header" as HeaderPackage {
+  class "Header" as HeaderClass <<Component>> {
+    (Img) Site Logo
+    (Button) Share Button
+      \t(Button) Twitter
+      \t(Button) Copy Link
+    (Button) Gear Icon
+    (Button) Hamburger Menu
+    ---
+  }
+
+  class "Hamburger Menu" <<Overlay>> {
+    (PullDown) Display Language
+    (Button) Report Issue
+    (Button) Terms of Use
+    (Button) Log Out
+    ---
+    Change display language
+    Log out from the system
+  }
+}
+
+
+"Login Page" --> "Home Page" : (Button) Log In
+"HeaderClass" --> "Hamburger Menu"
+"HeaderClass" --> "Home Page" : (Img) Site Logo
+"HeaderClass" --> "Settings Page" : (Button) Gear Icon
+"Settings Page" --> "Change Password Modal" : (Button) Change Password
+"Hamburger Menu" --> "Login Page" : (Button) Log Out
+
+@enduml
