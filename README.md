@@ -3,6 +3,7 @@
 ## ABOUT
 - UCOD (/juːkɒd/, UI Class Operation Diagram) is a modeling notation based on class diagrams and screen transition diagrams.
 - It is designed for documentation, system analysis, and AI-assisted test design and implementation.
+
 ![UCOD Sample](./samples/ucod-sample.png)
 
 ---

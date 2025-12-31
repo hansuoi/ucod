@@ -3,6 +3,7 @@
 ## 概要
 - UCOD(ユーコッド, UI Class Operation Diagram)は、クラス図と画面遷移図をベースとしたモデリング記法である
 - ドキュメンテーション・システム分析・AIを活用したテスト設計/実装等を目的として設計されている
+
 ![UCODサンプル](./samples/ucod-sample.png)
 
 ---
