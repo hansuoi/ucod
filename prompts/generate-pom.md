@@ -5,22 +5,24 @@ Read the UCOD structure carefully and implement the corresponding Page Object cl
     - Playwright: https://playwright.dev
 
 
-# Rules
-## Class Mapping
+# POM Implementation Rules
+## Page Object (*.page.ts)
+### Class Mapping
 | UCOD Stereotype | Implementation Rule |
 | --------------- | ------------------- |
 | `<<Page>>` | Implement as a standalone Page Object class. |
 | `<<Component>>` | Implement as a reusable class imported into the relevant Page Object. |
 | `<<Modal>>`, `<<Overlay>>` | Implement as nested classes or inner objects inside the originating Page Object (or Component). |
 
-## UI Elements
+### UI Elements
 - Each UI element such as `(Button)`, `(TextBox)`, `(Link)`, `(Img)` should be defined as a Locator using Playwright's `page.locator()` syntax.
     - Example: `readonly loginButton = this.page.locator('button:text("Log In")');`
+    - Reference the product source code for accurate UI text and attributes
 - For elements with child elements (indented in UCOD), define them as grouped objects or separate locators as appropriate.
 
-## Methods
+### Methods
 - For each UI element, define a simple operation method if needed (e.g., `clickLoginButton()`, `enterEmail()`).
-- For each user action (the third layer in the UCOD class), implement a high-level method that performs a sequence of UI interactions.
+- For each user action (the third layer in the UCOD class), implement a method that performs a sequence of UI interactions.
 ```typescript
 async login(email: string, password: string) {
   await this.emailField.fill(email);
@@ -29,43 +31,35 @@ async login(email: string, password: string) {
 }
 ```
 
-## Conditional Navigation
-- Arrows (`-->`) in UCOD indicate navigations or interactions between classes.
-- Each represents a normal test flow — performing the trigger action should lead to the target screen or modal.
-- If a condition such as if something exists, include it as a comment or logical guard.
+## Assertion (*.assert.ts)
+### UI Elements
+- Implement assertion methods to verify UI element visibility, enabled/disabled state as needed
 
-## Dummy Data
-- When a `(TextBox)` element requires input and the value is not specified, generate reasonable dummy data.
+### Arrows
+- When UCOD contains `A --> B : (Button) X`, implement assertion methods to verify transition to `B`
+    - Verify `B` page heading text, modal visibility, etc.
 
-
-# Output Format
-- For each `<<Page>>`, output:
-    - File name (PascalCase, e.g. LoginPage.ts)
-    - Full TypeScript code:
-        - `import { Page, Locator } from '@playwright/test';`
-        - Constructor receives a `Page` instance.
-        - All locators and methods defined according to UCOD.
-- Export statement:
-    - export class LoginPage { /* ... */ }
-- If the UCOD contains multiple pages, output multiple files sequentially.
+## Test Code (*.spec.ts)
+- User Actions: Represent test steps and test triggers
+    - e.g. `A --> B`: Test case "Can transition from A to B"
+- Arrows: Each arrow represents one test case
+    - e.g. `A --> B : (Button) X if {condition}`: Test case "In {condition} state, clicking (Button) X on A transitions to B"
 
 
-# Additional Notes
-- Preserve hierarchical relationships (package, indentation) as folder or namespace structures if appropriate.
-- Include comments summarizing the original UCOD class description and purpose.
-- Keep code clean, readable, and aligned with standard Playwright patterns (e.g., Selector Strategy (priority)).
-- When you generate the code:
-    - Follow the UCOD's structure faithfully.
-    - Reflect all UI elements and user actions.
-    - Keep consistent naming (PascalCase for class names, camelCase for methods and locators).
-    - Focus on testability, reusability, and clarity.
+# Design Principles
+1. Never Weaken Assertions
+    - Do not delete or relax assertions to make tests pass
+    - If tests fail, fix implementation or propose UCOD updates
+1. Maintain Consistency with Implementation
+    - Reference actual product code for UI text and element attributes
+    - Follow existing selector strategies and style guides
+1. Ensure Traceability
+    - Each test artifact should trace back to UCOD elements
+    - Maintain bidirectional mapping between UCOD and implementation
 
 
-# Input & Output
-- Input: UCOD file content (.puml)
-- Output: Corresponding Playwright POM implementation (TypeScript code)
-
-- Example Input (simplified)
+# Example
+## Input: UCOD
 ```plantuml
 @startuml
 class "Login Page" <<Page>> {
@@ -75,10 +69,17 @@ class "Login Page" <<Page>> {
   ---
   Perform login
 }
+
+class "Home Page" <<Page>> {
+  (Text) Welcome Message
+  ---
+}
+
+"Login Page" --> "Home Page" : (Button) Log In
 @enduml
 ```
 
-- Example Output (simplified)
+## Output 1: Page Object
 ```typescript
 import { Page, Locator } from '@playwright/test';
 
@@ -101,4 +102,39 @@ export class LoginPage {
     await this.loginButton.click();
   }
 }
+```
+
+## Output 2: Assertion
+```typescript
+import { expect, Page } from '@playwright/test';
+
+export class HomePageAssertions {
+  constructor(private page: Page) {}
+
+  async assertOnHomePage() {
+    await expect(this.page).toHaveURL(/\/home/);
+  }
+
+  async assertWelcomeMessageVisible() {
+    await expect(this.page.locator('text=Welcome')).toBeVisible();
+  }
+}
+```
+
+## Output 3: Test Code
+```typescript
+import { test } from '@playwright/test';
+import { LoginPage } from './pages/LoginPage';
+import { HomePageAssertions } from './assertions/HomePageAssertions';
+
+test('Login transitions to Home Page', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  const homeAssert = new HomePageAssertions(page);
+
+  await page.goto('/login');
+  await loginPage.login('user@example.com', 'password123');
+
+  await homeAssert.assertOnHomePage();
+  await homeAssert.assertWelcomeMessageVisible();
+});
 ```

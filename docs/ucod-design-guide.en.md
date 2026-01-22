@@ -90,6 +90,7 @@ class "Settings Page" <<Page>> {
 
 ## 3. UCOD as a Design Model for POM-Based Test Automation
 - UCOD can serve as a design-level model for implementing automated tests using the Page Object Model (POM) pattern.
+- Particularly useful as a design model for automated test implementation using generative AI agents.
 
 ### Page Object Implementation
 - (Assuming Playwright with TypeScript)
@@ -97,11 +98,16 @@ class "Settings Page" <<Page>> {
 - Each UCOD class can be directly mapped to a corresponding POM class:
     - `<<Page>>` → PageObject
     - `<<Component>>` → Separate class, imported and composed into a Page Object
+        - Tests start from any `<<Page>>` that contains the `<<Component>>`
     - `<<Modal>>` / `<<Overlay>>` → Nested within the parent Page Object or Component
-- Each UI element such as `(Button)` or `(TextBox)` is implemented as a Locator.
-- The third layer (User Actions) in UCOD corresponds to high-level methods that combine multiple UI operations.
+- Each UI element such as `(Button)`, `(TextBox)`, etc. is implemented as a Locator
+    - Define dedicated operation methods as needed
+- The third layer (User Actions) in UCOD corresponds to high-level methods that combine multiple UI operations (calling individual operation methods internally)
     - e.g. `login({ email, password })`, `changePassword({ old, new })`
 
+### Assertion File Implementation
+- Assertions can be implemented based on each UI element
+
 ### Test Code Implementation
-- Each arrow in UCOD represents a normal flow — that is, “under certain conditions, performing an action triggers a transition to another screen or opens a new modal.”
-- Therefore, following an arrow from one class to another corresponds directly to a valid end-to-end test case.
+- The arrow path from one class to another can itself become a test case
+    - UCOD arrows represent "(under certain conditions) triggering a user action transitions to the next screen/modal or displays child elements"
