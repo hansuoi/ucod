@@ -28,10 +28,10 @@
 - 生成AIによるテストケースの設計:
     - 生成AIにUCODを読み込ませ、UCODに記載されているUI要素やページ遷移を網羅させることで、基本的な正常系のテストスイートを設計できる
     - 生成AIにテスト観点図なども併せて読み込ませることで、正常系以外のテストスイートをも設計できる
-    - [スクリプト例](./prompts/generate-testcases.md)
-- 生成AIによるPOMを採用した自動テストスクリプトの実装:
-    - 生成AIにUCODとPage Objectとの対応関係を読み込ませることで、POM(Page Object Model)を採用した自動テストスクリプトを実装できる
-    - [スクリプト例](./prompts/generate-pom.md)
+    - [プロンプト例](./prompts/generate-testcases.md)
+- 生成AIによる自動テストの自動実装:
+    - 生成AIにUCODを読み込ませ、UCODをPOM(Page Object Model)の設計モデルとして解釈させることで、Page Object・アサーション・テストコードの全てを自動生成できる
+    - [プロンプト例](./prompts/generate-pom.md)
 
 ---
 

@@ -29,8 +29,8 @@
     - By providing UCOD to a generative AI, you can design a basic test suite for happy-path scenarios that covers UI elements and page transitions.
     - By combining UCOD with test viewpoint diagrams, test suites that include non-happy-path scenarios can also be designed.
     - [Sample prompt](./prompts/generate-testcases.md)
-- AI-assisted implementation of automated test scripts using POM:
-    - By providing the mapping between UCOD and Page Objects to a generative AI, automated test scripts based on the Page Object Model (POM) can be implemented.
+- AI-assisted automated test implementation:
+    - By providing UCOD to generative AI and having it interpret UCOD as a design model for POM (Page Object Model), all of Page Objects, Assertions, and Test Code can be automatically generated.
     - [Sample prompt](./prompts/generate-pom.md)
 
 ---
