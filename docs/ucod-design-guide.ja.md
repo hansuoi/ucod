@@ -99,7 +99,7 @@ class "Settings Page" <<Page>> {
     - `<<Modal>>` / `<<Overlay>>` → 遷移元のPageObject(またはComponent)に内包させる
 - 各UI要素 `(Button)`, `(TextBox)`, etc. は`Locator`として実装できる
     - 必要に応じて専用の操作メソッドを用意する
-- UCOD三層目の「ユーザーのアクション」は、複数UI操作を束ねた(内部で個々の操作メソッドを呼び出す)高レベルメソッドとしてPageObjectに実装できる
+- UCOD三層目の「ユーザーのアクション」は、複数UI操作を束ねた(内部で個々の操作メソッドを呼び出す)メソッドとしてPageObjectに実装できる
     - e.g. `login({ email, password })`, `changePassword({ old, new })`
 
 ### アサーションファイルの実装

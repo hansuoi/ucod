@@ -102,7 +102,7 @@ class "Settings Page" <<Page>> {
     - `<<Modal>>` / `<<Overlay>>` → Nested within the parent Page Object or Component
 - Each UI element such as `(Button)`, `(TextBox)`, etc. is implemented as a Locator
     - Define dedicated operation methods as needed
-- The third layer (User Actions) in UCOD corresponds to high-level methods that combine multiple UI operations (calling individual operation methods internally)
+- The third layer (User Actions) in UCOD corresponds to methods that combine multiple UI operations (calling individual operation methods internally)
     - e.g. `login({ email, password })`, `changePassword({ old, new })`
 
 ### Assertion File Implementation
