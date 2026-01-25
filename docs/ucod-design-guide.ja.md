@@ -11,6 +11,7 @@
     1. {ステレオタイプ} {クラス名}
     2. {UI要素のタイプ} {UI要素名}
     3. {ユーザーのアクション}
+- 複数のクラスをひとまとめにして扱いたい場合は、適宜パッケージを定義する
 ```plantuml
 class "Login Page" <<Page>> {
   (TextBox) Password
@@ -25,7 +26,7 @@ class "Login Page" <<Page>> {
     - 必要に応じて適宜追加・統合してよい
 
 ### UI要素のタイプ
-- `(Button)`, `(TextBox)`, `(Link)`, `(CheckBox)`, `(RadioButton)`, `(Text)`, `(Img)`, など
+- `<<Component>>`, `(Button)`, `(TextBox)`, `(Link)`, `(CheckBox)`, `(RadioButton)`, `(Text)`, `(Img)`, など
     - 必要に応じて適宜追加・統合してよい
 
 ### UI要素
@@ -74,10 +75,10 @@ class "Settings Page" <<Page>> {
 
 ## 2. 矢印
 - `A --> B : (Button) exampleButton`
-    - 画面Aでの exampleButtonのクリックをトリガとして 画面Bに遷移できる ことを表す
+    - 画面`A`での `exampleButton`のクリックをトリガとして 画面`B`に遷移できる ことを表す
     - トリガを表すラベル部(`(Button) exampleButton`)は、自明な場合は省略してよい (設定ボタンをクリックして設定ページに遷移する場合など)
 - `A --> B : (Button) exampleButton if {condition}`
-    - ある条件conditionのもと 画面Aでの exampleButtonのクリックをトリガとして 画面Bに遷移できる ことを表す
+    - ある条件`condition`のもと 画面`A`での `exampleButton`のクリックをトリガとして 画面`B`に遷移できる ことを表す
 - `A <-> B`
     - 双方向に遷移可能でトリガが自明な場合は、双方向矢印を用いてもよい
 - (省略)
@@ -86,12 +87,14 @@ class "Settings Page" <<Page>> {
 ---
 
 ## 3. POMによる自動テストコードの設計モデルとしてのUCOD
+### 概要
 - UCODはPOM(Page Object Model)による自動テスト実装のための設計モデルとしての用途も想定している
 - 特に、生成AIエージェントなどを用いた、自動テストの自動実装における設計モデルとして有用である
 
-### Page Objectの実装
-- (TypeScriptによるPlaywrightでの実装を想定)
+### 実装例
+- TypeScriptによるPlaywrightでのPOM(Page Object Model)実装を想定する
 
+#### Page Objectの実装
 - UCODのクラスとPOMのクラスとは、基本的に下記の通り対応させて実装できる
     - `<<Page>>` → PageObject
     - `<<Component>>` → 別クラス化してPageObjectに適宜importする
@@ -102,9 +105,9 @@ class "Settings Page" <<Page>> {
 - UCOD三層目の「ユーザーのアクション」は、複数UI操作を束ねた(内部で個々の操作メソッドを呼び出す)メソッドとしてPageObjectに実装できる
     - e.g. `login({ email, password })`, `changePassword({ old, new })`
 
-### アサーションファイルの実装
+#### アサーションファイルの実装
 - 各UI要素をもとにアサーションを実装できる
 
-### テストコードの実装
-- あるクラスから別のクラスへの矢印の経路自体がテストケースとなり得る
+#### テストコードの実装
+- あるクラスから別のクラスへの矢印の経路自体がテストケースとなる
     - UCODの矢印は「(ある条件下で)あるユーザーのアクションをトリガとして 次の画面/モーダルに遷移できる or 子要素を表示できる」ことを表すため

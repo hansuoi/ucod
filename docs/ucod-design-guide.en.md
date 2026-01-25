@@ -88,26 +88,28 @@ class "Settings Page" <<Page>> {
 
 ---
 
-## 3. UCOD as a Design Model for POM-Based Test Automation
-- UCOD can serve as a design-level model for implementing automated tests using the Page Object Model (POM) pattern.
-- Particularly useful as a design model for automated test implementation using generative AI agents.
+## 3. POM-Based Automated Test Code Design Model as UCOD
+### Overview
+- UCOD is also intended for use as a design model for automated test implementation using POM (Page Object Model)
+- Particularly useful as a design model for automated test implementation using generative AI agents, etc.
 
-### Page Object Implementation
-- (Assuming Playwright with TypeScript)
+### Implementation Example
+- Assumes POM (Page Object Model) implementation in Playwright with TypeScript
 
-- Each UCOD class can be directly mapped to a corresponding POM class:
+#### Page Object Implementation
+- UCOD classes and POM classes can basically be implemented with the following correspondence:
     - `<<Page>>` → PageObject
-    - `<<Component>>` → Separate class, imported and composed into a Page Object
-        - Tests start from any `<<Page>>` that contains the `<<Component>>`
-    - `<<Modal>>` / `<<Overlay>>` → Nested within the parent Page Object or Component
-- Each UI element such as `(Button)`, `(TextBox)`, etc. is implemented as a Locator
-    - Define dedicated operation methods as needed
-- The third layer (User Actions) in UCOD corresponds to methods that combine multiple UI operations (calling individual operation methods internally)
+    - `<<Component>>` → Separate class and import into PageObject as appropriate
+        - Test starting from any `<<Page>>`, etc. that contains `<<Component>>`
+    - `<<Modal>>` / `<<Overlay>>` → Include in the transition source PageObject (or Component)
+- Each UI element `(Button)`, `(TextBox)`, etc. can be implemented as a `Locator`
+    - Prepare dedicated operation methods as needed
+- "User Actions" in the third layer of UCOD can be implemented as methods in PageObject that bundle multiple UI operations (calling individual operation methods internally)
     - e.g. `login({ email, password })`, `changePassword({ old, new })`
 
-### Assertion File Implementation
+#### Assertion File Implementation
 - Assertions can be implemented based on each UI element
 
-### Test Code Implementation
-- The arrow path from one class to another can itself become a test case
-    - UCOD arrows represent "(under certain conditions) triggering a user action transitions to the next screen/modal or displays child elements"
+#### Test Code Implementation
+- The arrow path from one class to another itself becomes a test case
+    - UCOD arrows represent "(under certain conditions) a user action is triggered to transition to the next screen/modal or display child elements"

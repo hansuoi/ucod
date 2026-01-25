@@ -1,7 +1,7 @@
 # UCOD
 
 ## ABOUT
-- UCOD (/juːkɒd/, UI Class Operation Diagram) is a modeling notation based on class diagrams and screen transition diagrams.
+- UCOD (/ˈjuːkɒd/, UI Class Operation Diagram) is a modeling notation based on class diagrams and screen transition diagrams, designed to visualize how users use a product.
 - It is designed for documentation, system analysis, and AI-assisted test design and implementation.
 
 ![UCOD Sample](./samples/ucod-sample.png)
@@ -21,16 +21,16 @@
 
 ---
 
-## Use Cases
-- Specification modeling:
-    - UCOD helps organize specifications for web-based products in a way that is friendly to both humans and generative AI.
-    - It is also useful for identifying areas for improvement, such as pages that contain too many UI elements or UI classes that frequently add or remove elements.
+## Use Cases for UCOD
+- Organizing how to use products:
+    - Specifications for web-based products in particular can be organized in a way that is friendly to both humans and generative AI
+    - Also useful for identifying improvement points in the system, such as whether UI elements are concentrated on a specific page, or whether there are too many UI element additions/deletions per UI class
 - AI-assisted test case design:
-    - By providing UCOD to a generative AI, you can design a basic test suite for happy-path scenarios that covers UI elements and page transitions.
-    - By combining UCOD with test viewpoint diagrams, test suites that include non-happy-path scenarios can also be designed.
-    - [Sample prompt](./prompts/generate-testcases.md)
+    - By providing UCOD to generative AI and covering the UI elements and page transitions described in UCOD, you can design a test suite
+    - Test viewpoint diagrams may also be provided to generative AI
+    - [Sample prompt](./prompts/generate-testcases-by-ucod.md)
 - AI-assisted automated test implementation:
-    - By providing UCOD to generative AI and having it interpret UCOD as a design model for POM (Page Object Model), all of Page Objects, Assertions, and Test Code can be automatically generated.
+    - By providing UCOD to generative AI and having it interpret UCOD as a design model for POM (Page Object Model), Page Objects, Assertions, and Test Code can be automatically generated
     - [Sample prompt](./prompts/generate-pom.md)
 
 ---
@@ -43,8 +43,8 @@
 │  ├─ ucod-design-guide.en.md
 │  └─ ucod-design-guide.ja.md
 ├─ prompts/
-│  ├─ generate-pom.md        # Sample prompt for AI-assisted implementation of automated tests using POM
-│  └─ generate-testcases.md  # Sample prompt for AI-assisted test case design
+│  ├─ generate-pom.md             # Sample prompt for AI-assisted implementation of automated tests using POM
+│  └─ generate-testcases-by-ucod.md  # Sample prompt for AI-assisted test case design
 └─ samples/
    ├─ ucod-sample.puml
    └─ test-viewpoint-sample.puml
