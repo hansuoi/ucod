@@ -43,8 +43,8 @@
 │  ├─ ucod-design-guide.en.md
 │  └─ ucod-design-guide.ja.md
 ├─ prompts/
-│  ├─ generate-pom.md        # POMを採用した自動テストスクリプトを生成AIに実装させる際のプロンプト例
-│  └─ generate-testcases.md  # テストケースを生成AIに設計させる際のプロンプト例
+│  ├─ generate-pom.md                # POMを採用した自動テストスクリプトを生成AIに実装させる際のプロンプト例
+│  └─ generate-testcases-by-ucod.md  # テストケースを生成AIに設計させる際のプロンプト例
 └─ samples/
    ├─ ucod-sample.puml
    └─ test-viewpoint-sample.puml
