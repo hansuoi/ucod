@@ -96,7 +96,7 @@ export class LoginPage {
   constructor(page: Page) {
     this.page = page;
     this.emailTextBox = page.getByRole('textbox', { name: 'Email' });
-    this.passwordTextBox = page.getByRole('textbox', { name: 'Password' });
+    this.passwordTextBox = page.getByLabel('Password');
     this.loginButton = page.getByRole('button', { name: 'Log In' });
   }
 
