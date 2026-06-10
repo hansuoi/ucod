@@ -109,6 +109,11 @@ class "アカウント詳細" <<Page>> {
     - トリガを表すラベル部(`(Button) exampleButton`)は、自明な場合は省略してよい (設定ボタンをクリックして設定ページに遷移する場合など)
 - `A --> B : (Button) exampleButton if {condition}`
     - ある条件`condition`のもと 画面`A`での `exampleButton`のクリックをトリガとして 画面`B`に遷移できる ことを表す
+- 遷移先が条件によって異なる場合は、同じ遷移元・トリガを持つ矢印を並べ、`if {条件}` / `else if {条件}` / `else`を付けて表現できる
+```plantuml
+"Top Page" --> "Dashboard" : (Button) Start if ログイン済み
+"Top Page" --> "Login Page" : (Button) Start else if 未ログイン
+```
 - `A <-> B`
     - 双方向に遷移可能でトリガが自明な場合は、双方向矢印を用いてもよい
 - (省略)

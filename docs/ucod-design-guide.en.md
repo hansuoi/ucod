@@ -109,6 +109,11 @@ class "Account Details" <<Page>> {
     - The trigger label `(Button) exampleButton` may be omitted when the action is self-explanatory (e.g., clicking the “Settings” button opens the settings page).
 - `A --> B : (Button) exampleButton if {condition}`
     - Indicates that, under a specific condition, clicking the exampleButton on screen A transitions to screen B.
+- When the destination varies by condition, list arrows with the same source and trigger and append `if {condition}` / `else if {condition}` / `else`.
+```plantuml
+"Top Page" --> "Dashboard" : (Button) Start if Logged in
+"Top Page" --> "Login Page" : (Button) Start else if Not logged in
+```
 - `A <-> B`
     - Represents a bidirectional transition when the trigger is self-evident.
 - (Omitted)

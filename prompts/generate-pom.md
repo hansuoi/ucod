@@ -42,12 +42,14 @@ async login(email: string, password: string) {
 ### Arrows
 - When UCOD contains `A --> B : (Button) X`, implement assertion methods to verify transition to `B`
     - Verify `B` page heading text, modal visibility, etc.
+- When arrows with the same source and trigger use `if {condition}` / `else if {condition}` / `else`, implement the corresponding conditional transitions and assertions for each destination.
 
 ## Test Code (*.spec.ts)
 - User Actions: Represent test steps and test triggers
     - e.g. `A --> B`: Test case "Can transition from A to B"
 - Arrows: Each arrow represents one test case
     - e.g. `A --> B : (Button) X if {condition}`: Test case "In {condition} state, clicking (Button) X on A transitions to B"
+    - Treat related `if` / `else if` / `else` arrows as branch scenarios and cover every destination.
 
 
 # Design Principles
