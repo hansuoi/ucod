@@ -61,6 +61,7 @@ package "Header" as HeaderPackage {
 class "Settings Page" <<Page>> {
   <<Component>> Header
     \t+ (Text) Percentage of configured items
+    \t- (Button) Share Button
   ---
 }
 
@@ -84,6 +85,15 @@ class "アカウント一覧" <<Page>> {
 
 ### 条件によるUI要素の出し分け
 - ステータス・モード・権限などによって表示されるUI要素が変わる場合は、`if {条件}` / `else if {条件}` / `else`のブロックを用い、その条件下で表示される要素を一段インデントして表現できる
+```plantuml
+class "アカウント詳細" <<Page>> {
+  if 編集権限あり
+    \t(Button)編集
+  else
+    \t(Text)閲覧のみ
+  ---
+}
+```
 
 ### ユーザーのアクション
 - その画面でできることやユースケースを記述する
