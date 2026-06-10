@@ -27,6 +27,7 @@
     - Also useful for identifying improvement points in the system, such as whether UI elements are concentrated on a specific page, or whether there are too many UI element additions/deletions per UI class
 - AI-assisted test case design:
     - By providing UCOD to generative AI and covering the UI elements and page transitions described in UCOD, you can design a test suite
+    - Conditional branches (`if`/`else`) on UI elements and transitions can also serve as the basis for branch-coverage test design
     - Test viewpoint diagrams may also be provided to generative AI
     - [Sample prompt](./prompts/generate-testcases-by-ucod.md)
 - AI-assisted automated test implementation:

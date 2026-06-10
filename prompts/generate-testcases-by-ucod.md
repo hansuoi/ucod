@@ -16,7 +16,10 @@
 - UI elements `(Button)`, `(TextBox)`, `(Link)`, etc.: Create atomic steps (click, fill, select)
 - Transitions (`A --> B : (Button) X`):
     - Are happy-path test cases; after the trigger, assert the target context (page/modal/component visible)
-    - If `if {condition}` exists, i.e. `A --> B : (Button) X if {condition}`, encode it as preconditions or branch scenarios
+    - If related arrows with the same source and trigger use `if {condition}` / `else if {condition}` / `else`, encode each destination as a precondition / branch scenario and aim for branch coverage
+- Conditional UI blocks inside a class body (`if {condition}` / `else if` / `else`): treat each branch as a precondition / branch scenario, and aim for branch coverage
+- UI elements with `at {position}` (e.g., `(Chip) Status at Status column`): use the position as the locating context (which column/section the element lives in) for steps and assertions
+- `(Table)` columns (indented children): treat as per-row context; design row-level steps and assertions, and consider table-level cases (empty/single/many rows)
 
 ## From Test Viewpoints (if provided)
 - Use the mindmap nodes to generate test variations

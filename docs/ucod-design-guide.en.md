@@ -11,6 +11,8 @@
     1. {Stereotype} {Class Name}
     2. {UI Elements Type} {UI Elements Name}
     3. {User Actions}
+- Define packages as needed when grouping multiple classes together.
+- Keep display names (class names) unique across the diagram. When the same name is needed for multiple classes, assign an alias with `as` to distinguish them.
 ```plantuml
 class "Login Page" <<Page>> {
   (TextBox) Password
@@ -25,20 +27,21 @@ class "Login Page" <<Page>> {
     - Additional stereotypes can be defined as needed to match your system’s architecture.
 
 ### UI Elements Type
-- `(Button)`, `(TextBox)`, `(Link)`, `(CheckBox)`, `(RadioButton)`, `(Text)`, `(Img)`, etc.
+- `<<Component>>`, `(Button)`, `(TextBox)`, `(Link)`, `(CheckBox)`, `(RadioButton)`, `(Text)`, `(Img)`, `(Table)`, `(PullDown)`, `(Toggle)`, etc.
     - Additional UI elements type can be defined as needed to match your system’s architecture.
+    - Keep the vocabulary consistent within an organization or project so that synonymous type names do not proliferate (for example, `(Img)` and `(Image)`, or `(Date)` and `(DatePicker)`).
 
 ### UI Elements
 - There are two primary ways to represent child elements of a UI element:
-    - Indentation(`\t`)
+    1. Indentation
         - When the number of child elements is small, you can list them directly under the parent element using indentation.
         - The indentation level expresses the hierarchical structure (parent–child relationship).
         - Elements with the same indentation level are considered siblings.
-    - Separate Class
+    2. Separate class
         - When a UI element has many child elements, define it as a separate class.
         - Draw an arrow `-->` from the parent element to the new class to indicate the relationship.
-        - Use a package to group related classes. You may also assign an alias with the as keyword.
-        - If a UI element differs slightly on specific pages, prefix the modified child element with `+` or `-` to indicate additions or removals (diff-like notation).
+        - Group the original and separated classes in a `package` as appropriate. Class aliases may be assigned when needed.
+- If the child elements of a UI element differ slightly on a specific page, prefix their UI element types with `+` or `-` to express the differences.
 ```plantuml
 package "Header" as HeaderPackage {
   class "Header" as HeaderClass <<Component>> {
@@ -59,10 +62,37 @@ package "Header" as HeaderPackage {
 class "Settings Page" <<Page>> {
   <<Component>> Header
     \t+ (Text) Percentage of configured items
+    \t- (Button) Share Button
   ---
 }
 
 "HeaderClass" --> "Hamburger Menu"
+```
+
+### Repeating Elements Such as Tables
+- For elements with rows and columns such as `(Table)`, listing the columns as indented child elements makes the structure easier to read.
+    - If needed, indent the elements inside a cell one more level.
+```plantuml
+class "Account List" <<Page>> {
+  (Table) Accounts
+    \t(CheckBox) Select
+    \t(Text){Account ID}
+  ---
+}
+```
+
+- To indicate which position an element belongs to (e.g., a specific table column), you may append `at {position}` (e.g. `(PullDown) Status at Status column`).
+
+### Conditional Display of UI Elements
+- When the visible UI elements change depending on status, mode, permission, etc., use `if {condition}` / `else if {condition}` / `else` blocks and indent the elements shown under that condition one level.
+```plantuml
+class "Account Details" <<Page>> {
+  if Has edit permission
+    \t(Button) Edit
+  else
+    \t(Text) Read only
+  ---
+}
 ```
 
 ### User Actions
@@ -74,13 +104,16 @@ class "Settings Page" <<Page>> {
 ---
 
 ## 2. Arrows (Transitions)
-- UCOD uses arrows (-->) to represent transitions between screens, components, or overlays.
-
 - `A --> B : (Button) exampleButton`
     - Indicates that clicking the exampleButton on screen A triggers a transition to screen B.
     - The trigger label `(Button) exampleButton` may be omitted when the action is self-explanatory (e.g., clicking the “Settings” button opens the settings page).
 - `A --> B : (Button) exampleButton if {condition}`
     - Indicates that, under a specific condition, clicking the exampleButton on screen A transitions to screen B.
+- When the destination varies by condition, list arrows with the same source and trigger and append `if {condition}` / `else if {condition}` / `else`.
+```plantuml
+"Top Page" --> "Dashboard" : (Button) Start if Logged in
+"Top Page" --> "Login Page" : (Button) Start else if Not logged in
+```
 - `A <-> B`
     - Represents a bidirectional transition when the trigger is self-evident.
 - (Omitted)

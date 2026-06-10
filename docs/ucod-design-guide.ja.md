@@ -12,6 +12,7 @@
     2. {UI要素のタイプ} {UI要素名}
     3. {ユーザーのアクション}
 - 複数のクラスをひとまとめにして扱いたい場合は、適宜パッケージを定義する
+- 表示名(クラス名)は図全体で一意にしておくとよい。同名のクラスが複数必要な場合は、`as`でエイリアスを割り当てて区別する
 ```plantuml
 class "Login Page" <<Page>> {
   (TextBox) Password
@@ -26,8 +27,9 @@ class "Login Page" <<Page>> {
     - 必要に応じて適宜追加・統合してよい
 
 ### UI要素のタイプ
-- `<<Component>>`, `(Button)`, `(TextBox)`, `(Link)`, `(CheckBox)`, `(RadioButton)`, `(Text)`, `(Img)`, など
+- `<<Component>>`, `(Button)`, `(TextBox)`, `(Link)`, `(CheckBox)`, `(RadioButton)`, `(Text)`, `(Img)`, `(Table)`, `(PullDown)`, `(Toggle)`, など
     - 必要に応じて適宜追加・統合してよい
+    - 同じ意味のタイプ名が複数生まれないよう、組織・プロジェクト単位で採用する語彙を統一しておくとよい(例えば`(Img)`と`(Image)`・`(Date)`と`(DatePicker)`など)
 
 ### UI要素
 - あるUI要素の子要素の表現方法には、下記の2通りがある
@@ -59,10 +61,38 @@ package "Header" as HeaderPackage {
 class "Settings Page" <<Page>> {
   <<Component>> Header
     \t+ (Text) Percentage of configured items
+    \t- (Button) Share Button
   ---
 }
 
 "HeaderClass" --> "Hamburger Menu"
+```
+
+### テーブルなどの繰り返し要素
+- `(Table)`のように行・列を持つ要素は、カラムを子要素としてインデントで列挙すると構造が伝わりやすい
+    - 必要ならセル内の要素をさらに一段インデントしてもよい
+```plantuml
+class "アカウント一覧" <<Page>> {
+  (Table)アカウント表
+    \t(CheckBox)選択
+    \t(Text){アカウントID}
+  ---
+}
+```
+
+- ある要素がテーブルの特定の列など、どの位置に属するかを補足したい場合は、`at {位置}`を付けて表現してもよい (e.g. `(PullDown)ステータス at ステータス列`)
+
+
+### 条件によるUI要素の出し分け
+- ステータス・モード・権限などによって表示されるUI要素が変わる場合は、`if {条件}` / `else if {条件}` / `else`のブロックを用い、その条件下で表示される要素を一段インデントして表現できる
+```plantuml
+class "アカウント詳細" <<Page>> {
+  if 編集権限あり
+    \t(Button)編集
+  else
+    \t(Text)閲覧のみ
+  ---
+}
 ```
 
 ### ユーザーのアクション
@@ -79,6 +109,11 @@ class "Settings Page" <<Page>> {
     - トリガを表すラベル部(`(Button) exampleButton`)は、自明な場合は省略してよい (設定ボタンをクリックして設定ページに遷移する場合など)
 - `A --> B : (Button) exampleButton if {condition}`
     - ある条件`condition`のもと 画面`A`での `exampleButton`のクリックをトリガとして 画面`B`に遷移できる ことを表す
+- 遷移先が条件によって異なる場合は、同じ遷移元・トリガを持つ矢印を並べ、`if {条件}` / `else if {条件}` / `else`を付けて表現できる
+```plantuml
+"Top Page" --> "Dashboard" : (Button) Start if ログイン済み
+"Top Page" --> "Login Page" : (Button) Start else if 未ログイン
+```
 - `A <-> B`
     - 双方向に遷移可能でトリガが自明な場合は、双方向矢印を用いてもよい
 - (省略)

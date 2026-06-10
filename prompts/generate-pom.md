@@ -15,10 +15,14 @@ Read the UCOD structure carefully and implement the corresponding Page Object cl
 | `<<Modal>>`, `<<Overlay>>` | Implement as nested classes or inner objects inside the originating Page Object (or Component). |
 
 ### UI Elements
-- Each UI element such as `(Button)`, `(TextBox)`, `(Link)`, `(Img)` should be defined as a Locator using Playwright's `page.locator()` syntax.
-    - Example: `readonly loginButton = this.page.locator('button:text("Log In")');`
+- Each UI element such as `(Button)`, `(TextBox)`, `(Link)`, `(Img)` should be defined as a Locator.
+    - Prefer role-based locators (`page.getByRole(...)`) for resilience; use text- or CSS-based selectors (`page.locator('button:text("Log In")')`) only when a role-based locator is not feasible.
+    - Example: `readonly loginButton = this.page.getByRole('button', { name: 'Log In' });`
     - Reference the product source code for accurate UI text and attributes
 - For elements with child elements (indented in UCOD), define them as grouped objects or separate locators as appropriate.
+- For `(Table)` elements, model the columns (indented children) as row-scoped locators (resolve a cell relative to its row), rather than page-global locators.
+- For `at {position}` (e.g., `(Button) Pen at Edit column`), use the position as a hint to scope the locator (e.g., locate within the specified column/section).
+- For conditional blocks inside a class body (`if {condition}` / `else if` / `else`), expose the conditional elements as locators expected only under that condition, and branch the corresponding methods/assertions accordingly.
 
 ### Methods
 - For each UI element, define a simple operation method if needed (e.g., `clickLoginButton()`, `enterEmail()`).
@@ -38,12 +42,14 @@ async login(email: string, password: string) {
 ### Arrows
 - When UCOD contains `A --> B : (Button) X`, implement assertion methods to verify transition to `B`
     - Verify `B` page heading text, modal visibility, etc.
+- When arrows with the same source and trigger use `if {condition}` / `else if {condition}` / `else`, implement the corresponding conditional transitions and assertions for each destination.
 
 ## Test Code (*.spec.ts)
 - User Actions: Represent test steps and test triggers
     - e.g. `A --> B`: Test case "Can transition from A to B"
 - Arrows: Each arrow represents one test case
     - e.g. `A --> B : (Button) X if {condition}`: Test case "In {condition} state, clicking (Button) X on A transitions to B"
+    - Treat related `if` / `else if` / `else` arrows as branch scenarios and cover every destination.
 
 
 # Design Principles
@@ -91,9 +97,9 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.emailTextBox = page.locator('input[type="email"]');
-    this.passwordTextBox = page.locator('input[type="password"]');
-    this.loginButton = page.locator('button:text("Log In")');
+    this.emailTextBox = page.getByRole('textbox', { name: 'Email' });
+    this.passwordTextBox = page.getByLabel('Password');
+    this.loginButton = page.getByRole('button', { name: 'Log In' });
   }
 
   async login(email: string, password: string) {
@@ -116,7 +122,7 @@ export class HomePageAssertions {
   }
 
   async assertWelcomeMessageVisible() {
-    await expect(this.page.locator('text=Welcome')).toBeVisible();
+    await expect(this.page.getByText('Welcome')).toBeVisible();
   }
 }
 ```
