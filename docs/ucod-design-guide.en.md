@@ -11,8 +11,8 @@
     1. {Stereotype} {Class Name}
     2. {UI Elements Type} {UI Elements Name}
     3. {User Actions}
+- Define packages as needed when grouping multiple classes together.
 - Keep display names (class names) unique across the diagram. When the same name is needed for multiple classes, assign an alias with `as` to distinguish them.
-    - This avoids rendering collisions in PlantUML and prevents traceability issues for AI.
 ```plantuml
 class "Login Page" <<Page>> {
   (TextBox) Password
@@ -27,23 +27,21 @@ class "Login Page" <<Page>> {
     - Additional stereotypes can be defined as needed to match your system’s architecture.
 
 ### UI Elements Type
-- `(Button)`, `(TextBox)`, `(Link)`, `(CheckBox)`, `(RadioButton)`, `(Text)`, `(Img)`, `(Table)`, `(PullDown)`, `(Toggle)`, etc.
+- `<<Component>>`, `(Button)`, `(TextBox)`, `(Link)`, `(CheckBox)`, `(RadioButton)`, `(Text)`, `(Img)`, `(Table)`, `(PullDown)`, `(Toggle)`, etc.
     - Additional UI elements type can be defined as needed to match your system’s architecture.
-    - Keep the vocabulary consistent per organization/project so that synonymous type names do not proliferate.
-        - For example, avoid mixing `(Img)` and `(Image)`, or `(Date)` and `(DatePicker)`. Maintaining a glossary of adopted type names is one option.
+    - Keep the vocabulary consistent within an organization or project so that synonymous type names do not proliferate (for example, `(Img)` and `(Image)`, or `(Date)` and `(DatePicker)`).
 
 ### UI Elements
 - There are two primary ways to represent child elements of a UI element:
-    - Indentation(`\t`)
+    1. Indentation
         - When the number of child elements is small, you can list them directly under the parent element using indentation.
         - The indentation level expresses the hierarchical structure (parent–child relationship).
         - Elements with the same indentation level are considered siblings.
-    - Separate Class
+    2. Separate class
         - When a UI element has many child elements, define it as a separate class.
         - Draw an arrow `-->` from the parent element to the new class to indicate the relationship.
-        - Use a package to group related classes. You may also assign an alias with the as keyword.
-        - If a UI element differs slightly on specific pages, prefix the modified child element with `+` or `-` to indicate additions or removals (diff-like notation).
-            - `+`/`-` are markers for diffs against other classes. For ordinary child elements that are not diffs (e.g., listing table columns described below), omit them and use indentation only to avoid confusion.
+        - Group the original and separated classes in a `package` as appropriate. Class aliases may be assigned when needed.
+- If the child elements of a UI element differ slightly on a specific page, prefix their UI element types with `+` or `-` to express the differences.
 ```plantuml
 package "Header" as HeaderPackage {
   class "Header" as HeaderClass <<Component>> {
@@ -64,6 +62,7 @@ package "Header" as HeaderPackage {
 class "Settings Page" <<Page>> {
   <<Component>> Header
     \t+ (Text) Percentage of configured items
+    \t- (Button) Share Button
   ---
 }
 
@@ -74,47 +73,24 @@ class "Settings Page" <<Page>> {
 - For elements with rows and columns such as `(Table)`, listing the columns as indented child elements makes the structure easier to read.
     - If needed, indent the elements inside a cell one more level.
 ```plantuml
-class "Quotation Project List" <<Page>> {
-  (Table) Quotation Projects
+class "Account List" <<Page>> {
+  (Table) Accounts
     \t(CheckBox) Select
-    \t(Link) {Project ID}
-    \t(PullDown) Status
+    \t(Text){Account ID}
   ---
 }
 ```
 
-### Annotating Position and Condition
-- To indicate which position an element belongs to (e.g., a specific table column), you may append `at {position}`.
-    - Examples: `(Button) Pen at Edit column`, `(Chip) Status at Status column`
-- When an element is shown only under a certain condition, you may append `if {condition}`, just like on arrows.
-    - Example: `(Img) Drawing thumbnail if linked with Drawer`
-- When combining `at` and `if`, ordering them as `(Type) Name at {position} if {condition}` reads well (adjust the order to fit your conventions).
+- To indicate which position an element belongs to (e.g., a specific table column), you may append `at {position}` (e.g. `(PullDown) Status at Status column`).
 
 ### Conditional Display of UI Elements
 - When the visible UI elements change depending on status, mode, permission, etc., use `if {condition}` / `else if {condition}` / `else` blocks and indent the elements shown under that condition one level.
-- These branches can serve as the basis for preconditions / branch scenarios in test design, and for conditional locators in POM.
 ```plantuml
-class "Quotation Detail" <<Page>> {
-  <<Component>> Header
-  if Status = Draft
-    \t(Button) Confirm Quotation
-    \t(Button) Delete
-  else if Status = Confirmed
-    \t(Button) Send Quotation Request Email
+class "Account Details" <<Page>> {
+  if Has edit permission
+    \t(Button) Edit
   else
-    \t(Text) Already received, cannot be edited
-  ---
-}
-```
-- Multi-step flows such as wizards can also be expressed as branches keyed on the step number, etc.
-```plantuml
-class "Re-quotation Request" <<Modal>> {
-  if 1 Edit content
-    \t(TextBox) Request notes
-    \t(Button) Next
-  else if 2 Preview
-    \t(Button) Back
-    \t(Button) Create
+    \t(Text) Read only
   ---
 }
 ```
@@ -128,8 +104,6 @@ class "Re-quotation Request" <<Modal>> {
 ---
 
 ## 2. Arrows (Transitions)
-- UCOD uses arrows (-->) to represent transitions between screens, components, or overlays.
-
 - `A --> B : (Button) exampleButton`
     - Indicates that clicking the exampleButton on screen A triggers a transition to screen B.
     - The trigger label `(Button) exampleButton` may be omitted when the action is self-explanatory (e.g., clicking the “Settings” button opens the settings page).
